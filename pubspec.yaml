@@ -1,4 +1,4 @@
-name: flutter_site_container
+name: flutter_ytiol
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -38,6 +38,8 @@ dependencies:
   webview_flutter: ^4.4.2
   flutter_sharing_intent: ^1.1.1
   share_plus: ^8.0.2
+  receive_sharing_intent: ^1.6.7
+  another_stepper: ^1.2.2
 
 dev_dependencies:
   flutter_test:

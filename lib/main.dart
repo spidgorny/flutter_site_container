@@ -1,6 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_ytiol/stepper.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,7 +11,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,70 +18,78 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Your Site Name'),
+      // home: const WebView(title: 'Your Site Name'),
+      // home: const ShareReceiver(),
+      home: UploadStepper(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+class ShareReceiver extends StatefulWidget {
+  const ShareReceiver({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _ShareReceiver createState() => _ShareReceiver();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  static String currentUrl = 'https://flutter.dev';
+class _ShareReceiver extends State<ShareReceiver> {
+  late StreamSubscription _intentSub;
+  final _sharedFiles = <SharedMediaFile>[];
 
-  WebViewController controller = WebViewController()
-    ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    ..setBackgroundColor(const Color(0x00000000))
-    ..setNavigationDelegate(
-      NavigationDelegate(
-        onProgress: (int progress) {
-          // Update loading bar.
-        },
-        onPageStarted: (String url) {
-          currentUrl = url;
-        },
-        onPageFinished: (String url) {},
-        onWebResourceError: (WebResourceError error) {},
-        onNavigationRequest: (NavigationRequest request) {
-          if (request.url.startsWith('https://www.youtube.com/')) {
-            return NavigationDecision.prevent;
-          }
-          return NavigationDecision.navigate;
-        },
-      ),
-    )
-    ..loadRequest(Uri.parse(currentUrl));
+  @override
+  void initState() {
+    super.initState();
+
+    // Listen to media sharing coming from outside the app while the app is in the memory.
+    _intentSub = ReceiveSharingIntent.getMediaStream().listen((value) {
+      setState(() {
+        _sharedFiles.clear();
+        _sharedFiles.addAll(value);
+
+        print(_sharedFiles.map((f) => f.toMap()));
+      });
+    }, onError: (err) {
+      print("getIntentDataStream error: $err");
+    });
+
+    // Get the media sharing coming from outside the app while the app is closed.
+    ReceiveSharingIntent.getInitialMedia().then((value) {
+      setState(() {
+        _sharedFiles.clear();
+        _sharedFiles.addAll(value);
+        print(_sharedFiles.map((f) => f.toMap()));
+
+        // Tell the library that we are done processing the intent.
+        ReceiveSharingIntent.reset();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _intentSub.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: [
-          IconButton(
-              onPressed: () => {Share.share(currentUrl)},
-              icon: const Icon(Icons.share))
-        ],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Expanded(child: WebViewWidget(controller: controller))
-          ],
+    const textStyleBold = TextStyle(fontWeight: FontWeight.bold);
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Plugin example app'),
+        ),
+        body: Center(
+          child: Column(
+            children: <Widget>[
+              const Text("Shared files:", style: textStyleBold),
+              Text(_sharedFiles
+                  .map((f) => f.toMap())
+                  .join(",\n****************\n")),
+            ],
+          ),
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _incrementCounter,
-      //   tooltip: 'Increment',
-      //   child: const Icon(Icons.add),
-      // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
