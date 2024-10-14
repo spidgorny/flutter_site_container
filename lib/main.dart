@@ -1,15 +1,40 @@
 import 'package:flutter/material.dart';
+import "package:flutter/services.dart" as s;
 import 'package:share_plus/share_plus.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import "package:yaml/yaml.dart";
 
-void main() {
+import 'config.dart';
+
+void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  var config = const Config(title: 'asd', lastName: 'qwe', age: 12);
+
+  @override
+  void initState() {
+    super.initState();
+    loadConfig();
+  }
+
+  void loadConfig() async {
+    final data = await s.rootBundle.loadString('assets/config.yaml');
+    final mapData = loadYaml(data);
+    print(mapData);
+    setState(() {
+      config = Config.fromJson(mapData);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
