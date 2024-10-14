@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import "package:flutter/services.dart" as s;
 import 'package:share_plus/share_plus.dart';
@@ -31,18 +33,18 @@ class _MyAppState extends State<MyApp> {
     final mapData = loadYaml(data);
     print(mapData);
     setState(() {
-      config = Config.fromJson(mapData);
+      config = Config.fromJson(json.decode(json.encode(mapData)));
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Your Site Name',
+      title: config.title,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Your Site Name'),
+      home: MyHomePage(title: config.title),
     );
   }
 }
