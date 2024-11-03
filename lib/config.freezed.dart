@@ -21,8 +21,8 @@ Config _$ConfigFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Config {
   String get title => throw _privateConstructorUsedError;
-  String get lastName => throw _privateConstructorUsedError;
-  int get age => throw _privateConstructorUsedError;
+  String get url => throw _privateConstructorUsedError;
+  String get color => throw _privateConstructorUsedError;
 
   /// Serializes this Config to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -38,7 +38,7 @@ abstract class $ConfigCopyWith<$Res> {
   factory $ConfigCopyWith(Config value, $Res Function(Config) then) =
       _$ConfigCopyWithImpl<$Res, Config>;
   @useResult
-  $Res call({String title, String lastName, int age});
+  $Res call({String title, String url, String color});
 }
 
 /// @nodoc
@@ -57,22 +57,22 @@ class _$ConfigCopyWithImpl<$Res, $Val extends Config>
   @override
   $Res call({
     Object? title = null,
-    Object? lastName = null,
-    Object? age = null,
+    Object? url = null,
+    Object? color = null,
   }) {
     return _then(_value.copyWith(
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      lastName: null == lastName
-          ? _value.lastName
-          : lastName // ignore: cast_nullable_to_non_nullable
+      url: null == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
               as String,
-      age: null == age
-          ? _value.age
-          : age // ignore: cast_nullable_to_non_nullable
-              as int,
+      color: null == color
+          ? _value.color
+          : color // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -84,7 +84,7 @@ abstract class _$$ConfigImplCopyWith<$Res> implements $ConfigCopyWith<$Res> {
       __$$ConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String title, String lastName, int age});
+  $Res call({String title, String url, String color});
 }
 
 /// @nodoc
@@ -101,22 +101,22 @@ class __$$ConfigImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? title = null,
-    Object? lastName = null,
-    Object? age = null,
+    Object? url = null,
+    Object? color = null,
   }) {
     return _then(_$ConfigImpl(
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      lastName: null == lastName
-          ? _value.lastName
-          : lastName // ignore: cast_nullable_to_non_nullable
+      url: null == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
               as String,
-      age: null == age
-          ? _value.age
-          : age // ignore: cast_nullable_to_non_nullable
-              as int,
+      color: null == color
+          ? _value.color
+          : color // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -125,7 +125,7 @@ class __$$ConfigImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ConfigImpl with DiagnosticableTreeMixin implements _Config {
   const _$ConfigImpl(
-      {required this.title, required this.lastName, required this.age});
+      {required this.title, required this.url, required this.color});
 
   factory _$ConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$ConfigImplFromJson(json);
@@ -133,13 +133,13 @@ class _$ConfigImpl with DiagnosticableTreeMixin implements _Config {
   @override
   final String title;
   @override
-  final String lastName;
+  final String url;
   @override
-  final int age;
+  final String color;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Config(title: $title, lastName: $lastName, age: $age)';
+    return 'Config(title: $title, url: $url, color: $color)';
   }
 
   @override
@@ -148,8 +148,8 @@ class _$ConfigImpl with DiagnosticableTreeMixin implements _Config {
     properties
       ..add(DiagnosticsProperty('type', 'Config'))
       ..add(DiagnosticsProperty('title', title))
-      ..add(DiagnosticsProperty('lastName', lastName))
-      ..add(DiagnosticsProperty('age', age));
+      ..add(DiagnosticsProperty('url', url))
+      ..add(DiagnosticsProperty('color', color));
   }
 
   @override
@@ -158,14 +158,13 @@ class _$ConfigImpl with DiagnosticableTreeMixin implements _Config {
         (other.runtimeType == runtimeType &&
             other is _$ConfigImpl &&
             (identical(other.title, title) || other.title == title) &&
-            (identical(other.lastName, lastName) ||
-                other.lastName == lastName) &&
-            (identical(other.age, age) || other.age == age));
+            (identical(other.url, url) || other.url == url) &&
+            (identical(other.color, color) || other.color == color));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, title, lastName, age);
+  int get hashCode => Object.hash(runtimeType, title, url, color);
 
   /// Create a copy of Config
   /// with the given fields replaced by the non-null parameter values.
@@ -186,17 +185,17 @@ class _$ConfigImpl with DiagnosticableTreeMixin implements _Config {
 abstract class _Config implements Config {
   const factory _Config(
       {required final String title,
-      required final String lastName,
-      required final int age}) = _$ConfigImpl;
+      required final String url,
+      required final String color}) = _$ConfigImpl;
 
   factory _Config.fromJson(Map<String, dynamic> json) = _$ConfigImpl.fromJson;
 
   @override
   String get title;
   @override
-  String get lastName;
+  String get url;
   @override
-  int get age;
+  String get color;
 
   /// Create a copy of Config
   /// with the given fields replaced by the non-null parameter values.

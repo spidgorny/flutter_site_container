@@ -8,13 +8,13 @@ part of 'config.dart';
 
 _$ConfigImpl _$$ConfigImplFromJson(Map<String, dynamic> json) => _$ConfigImpl(
       title: json['title'] as String,
-      lastName: json['lastName'] as String,
-      age: (json['age'] as num).toInt(),
+      url: json['url'] as String,
+      color: json['color'] as String,
     );
 
 Map<String, dynamic> _$$ConfigImplToJson(_$ConfigImpl instance) =>
     <String, dynamic>{
       'title': instance.title,
-      'lastName': instance.lastName,
-      'age': instance.age,
+      'url': instance.url,
+      'color': instance.color,
     };

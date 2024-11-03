@@ -12,8 +12,8 @@ part 'config.g.dart';
 class Config with _$Config {
   const factory Config({
     required String title,
-    required String lastName,
-    required int age,
+    required String url,
+    required String color,
   }) = _Config;
 
   factory Config.fromJson(Map<String, Object?> json) => _$ConfigFromJson(json);

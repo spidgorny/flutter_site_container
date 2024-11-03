@@ -19,8 +19,17 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
+extension HexColor on Color {
+  static Color fromHex(String hexString) {
+    final buffer = StringBuffer();
+    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
+    buffer.write(hexString.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
+  }
+}
+
 class _MyAppState extends State<MyApp> {
-  var config = const Config(title: 'asd', lastName: 'qwe', age: 12);
+  var config = const Config(title: 'asd', url: 'https://flutter.dev', color: '#2196F3');
 
   @override
   void initState() {
@@ -39,27 +48,36 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: config.title,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        colorScheme: ColorScheme.fromSeed(seedColor: HexColor.fromHex(config.color)),
       ),
-      home: MyHomePage(title: config.title),
+      home: MyHomePage(config: config),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.config});
 
-  final String title;
+  final Config config;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  static String currentUrl = 'https://flutter.dev';
+  static String currentUrl = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    currentUrl = widget.config.url;
+  }
+
 
   WebViewController controller = WebViewController()
     ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -88,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.config.title),
         actions: [
           IconButton(
               onPressed: () => {Share.share(currentUrl)},
