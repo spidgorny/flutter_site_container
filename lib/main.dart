@@ -7,6 +7,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import "package:yaml/yaml.dart";
 
 import 'config.dart';
+import 'loading.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -29,7 +30,7 @@ extension HexColor on Color {
 }
 
 class _MyAppState extends State<MyApp> {
-  var config = const Config(title: 'asd', url: 'https://flutter.dev', color: '#2196F3');
+  var config; //const Config(title: 'asd', url: 'https://flutter.dev', color: '#2196F3');
 
   @override
   void initState() {
@@ -40,21 +41,23 @@ class _MyAppState extends State<MyApp> {
   void loadConfig() async {
     final data = await s.rootBundle.loadString('assets/config.yaml');
     final mapData = loadYaml(data);
-    print(mapData);
+    print('yaml'+ mapData);
     setState(() {
-      config = Config.fromJson(json.decode(json.encode(mapData)));
+      var jsonData = json.decode(json.encode(mapData));
+      config = Config.fromJson(jsonData);
+      print('config'+ config.toString());
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
-      title: config.title,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: HexColor.fromHex(config.color)),
+      title: config != null ? config.title:'Loading...',
+      theme: ThemeData (
+        colorScheme:config!=null?
+            ColorScheme.fromSeed(seedColor: HexColor.fromHex(config.color)):ColorScheme.light(),
       ),
-      home: MyHomePage(config: config),
+      home: config != null ? MyHomePage(config: config) : LoadingPage(),
     );
   }
 }
@@ -77,7 +80,6 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     currentUrl = widget.config.url;
   }
-
 
   WebViewController controller = WebViewController()
     ..setJavaScriptMode(JavaScriptMode.unrestricted)

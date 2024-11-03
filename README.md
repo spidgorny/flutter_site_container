@@ -18,7 +18,9 @@ samples, guidance on mobile development, and a full API reference.
 ## Update frozen
 
 > dart run build_runner build
+> flutter pub run build_runner build
 
 ## Build native splash
 
 > dart run flutter_native_splash:create
+> flutter pub run flutter_native_splash:create
