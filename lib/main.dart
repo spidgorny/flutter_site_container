@@ -30,7 +30,8 @@ extension HexColor on Color {
 }
 
 class _MyAppState extends State<MyApp> {
-  var config; //const Config(title: 'asd', url: 'https://flutter.dev', color: '#2196F3');
+  Config? config;
+  //const Config(title: 'asd', url: 'https://flutter.dev', color: '#2196F3');
 
   @override
   void initState() {
@@ -41,23 +42,24 @@ class _MyAppState extends State<MyApp> {
   void loadConfig() async {
     final data = await s.rootBundle.loadString('assets/config.yaml');
     final mapData = loadYaml(data);
-    print('yaml'+ mapData);
+    print("yaml: $mapData");
     setState(() {
       var jsonData = json.decode(json.encode(mapData));
       config = Config.fromJson(jsonData);
-      print('config'+ config.toString());
+      print('config: $config');
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: config != null ? config.title:'Loading...',
-      theme: ThemeData (
-        colorScheme:config!=null?
-            ColorScheme.fromSeed(seedColor: HexColor.fromHex(config.color)):ColorScheme.light(),
+      title: config != null ? config!.title : 'Loading...',
+      theme: ThemeData(
+        colorScheme: config != null
+            ? ColorScheme.fromSeed(seedColor: HexColor.fromHex(config!.color))
+            : const ColorScheme.light(),
       ),
-      home: config != null ? MyHomePage(config: config) : LoadingPage(),
+      home: config != null ? MyHomePage(config: config!) : const LoadingPage(),
     );
   }
 }
@@ -76,14 +78,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     currentUrl = widget.config.url;
+    controller.loadRequest(Uri.parse(currentUrl));
+    controller.setBackgroundColor(HexColor.fromHex(widget.config.color));
   }
 
   WebViewController controller = WebViewController()
     ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    ..setBackgroundColor(const Color(0x00000000))
     ..setNavigationDelegate(
       NavigationDelegate(
         onProgress: (int progress) {
@@ -101,8 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
           return NavigationDecision.navigate;
         },
       ),
-    )
-    ..loadRequest(Uri.parse(currentUrl));
+    );
 
   @override
   Widget build(BuildContext context) {
