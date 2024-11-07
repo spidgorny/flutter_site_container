@@ -24,3 +24,14 @@ samples, guidance on mobile development, and a full API reference.
 
 > dart run flutter_native_splash:create
 > flutter pub run flutter_native_splash:create
+
+## build
+
+> flutter build apk --split-per-abi
+> flutter build appbundle
+> flutter install
+> #flutter pub global activate rename
+> dart run change_app_package_name:main com.androidfromfrankfurt.pg_versions
+> rename setAppName --value 'PG Versions' --targets ios,android,macos,windows,linux
+
+ 
