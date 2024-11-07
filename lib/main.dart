@@ -2,13 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import "package:flutter/services.dart" as s;
-import 'package:share_plus/share_plus.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import "package:yaml/yaml.dart";
 
 import 'config.dart';
 import 'hex_color.dart';
 import 'loading.dart';
+import 'web_component.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -51,76 +50,8 @@ class _MyAppState extends State<MyApp> {
             ? ColorScheme.fromSeed(seedColor: HexColor.fromHex(config!.color))
             : const ColorScheme.light(),
       ),
-      home: config != null ? MyHomePage(config: config!) : const LoadingPage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.config});
-
-  final Config config;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  static String currentUrl = '';
-
-  @override
-  void initState() {
-    super.initState();
-    currentUrl = widget.config.url;
-    controller.loadRequest(Uri.parse(currentUrl));
-    controller.setBackgroundColor(HexColor.fromHex(widget.config.color));
-  }
-
-  WebViewController controller = WebViewController()
-    ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    ..setNavigationDelegate(
-      NavigationDelegate(
-        onProgress: (int progress) {
-          // Update loading bar.
-        },
-        onPageStarted: (String url) {
-          currentUrl = url;
-        },
-        onPageFinished: (String url) {},
-        onWebResourceError: (WebResourceError error) {},
-        onNavigationRequest: (NavigationRequest request) {
-          if (request.url.startsWith('https://www.youtube.com/')) {
-            return NavigationDecision.prevent;
-          }
-          return NavigationDecision.navigate;
-        },
-      ),
-    );
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.config.title),
-        actions: [
-          IconButton(
-              onPressed: () => {Share.share(currentUrl)},
-              icon: const Icon(Icons.share))
-        ],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Expanded(child: WebViewWidget(controller: controller))
-          ],
-        ),
-      ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _incrementCounter,
-      //   tooltip: 'Increment',
-      //   child: const Icon(Icons.add),
-      // ), // This trailing comma makes auto-formatting nicer for build methods.
+      home:
+          config != null ? WebComponent(config: config!) : const LoadingPage(),
     );
   }
 }
