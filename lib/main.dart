@@ -7,6 +7,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import "package:yaml/yaml.dart";
 
 import 'config.dart';
+import 'hex_color.dart';
 import 'loading.dart';
 
 void main() async {
@@ -20,18 +21,9 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-extension HexColor on Color {
-  static Color fromHex(String hexString) {
-    final buffer = StringBuffer();
-    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
-    buffer.write(hexString.replaceFirst('#', ''));
-    return Color(int.parse(buffer.toString(), radix: 16));
-  }
-}
-
 class _MyAppState extends State<MyApp> {
   Config? config;
-  //const Config(title: 'asd', url: 'https://flutter.dev', color: '#2196F3');
+  //      const Config(title: 'asd', url: 'https://flutter.dev', color: '#2196F3');
 
   @override
   void initState() {
