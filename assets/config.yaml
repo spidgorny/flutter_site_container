@@ -1,6 +1,6 @@
 id: Xp1ujKsZ1E5u6sd6CXlx0
-name: com.androidfromfrankfurt.google_com
-url: https://google.com
-title: Google
-color: "#000000"
+name: com.androidfromfrankfurt.web2app
+url: https://next-web2app-landing.vercel.app/
+title: Web2App Application Example
+color: "#ffffff"
 target: apk
